@@ -1,18 +1,19 @@
 {
   "name": "typed-css-modules-plugin",
   "icon": "logo.png",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "displayName": "CSS Module Typed",
   "description": "Creates .d.ts files from css-modules .css/.less/.scss/.sass/.styl files",
   "author": "xcodebuild <me@xcodebuild.com>",
   "contributors": [
     "Ignat Awwit <ignatius.awwit@gmail.com>",
-    "Daniel Clausmeyer <daniel@shwao.com>"
+    "Daniel Clausmeyer <daniel@shwao.com>",
+    "zkip lan <zkiplan@qq.com>"
   ],
-  "publisher": "awwit",
+  "publisher": "zkip",
   "engines": {
-    "vscode": ">=1.32.0"
+    "vscode": ">=1.55.0"
   },
   "categories": [
     "Other"
@@ -22,7 +23,7 @@
     "*"
   ],
   "repository": {
-    "url": "https://github.com/awwit/vscode-typed-css-modules"
+    "url": "https://github.com/zkip/vscode-typed-css-modules"
   },
   "main": "dist/extension.js",
   "contributes": {
@@ -64,7 +65,6 @@
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-promise": "5.1.0",
     "eslint-plugin-standard": "5.0.0",
-    "husky": "6.0.0",
     "less": "4.1.1",
     "prettier": "2.2.1",
     "rimraf": "3.0.2",

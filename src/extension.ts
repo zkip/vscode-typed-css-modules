@@ -2,6 +2,12 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
 import * as fs from 'fs'
+import {
+  resolveModuleName,
+  createCompilerHost,
+  findConfigFile,
+  sys,
+} from 'typescript'
 
 import { isFileEqualBuffer } from 'is-file-equal-buffer'
 
@@ -77,7 +83,7 @@ let sass: any = null
 function renderScss(
   content: string,
   indentedSyntax: boolean,
-  root: string
+  cwd: string
 ): string {
   if (sass === null) {
     sass = requireg('sass')
@@ -85,9 +91,38 @@ function renderScss(
 
   /** @see https://github.com/sass/dart-sass#javascript-api */
   return sass.renderSync({
+    importer(url: string) {
+      const name = url + '.scss'
+      const configFilePath = findConfigFile(cwd, sys.fileExists)
+
+      if (configFilePath !== undefined) {
+        const root = path.dirname(configFilePath)
+        const config = JSON.parse(fs.readFileSync(configFilePath).toString())
+        const compilerOptions = config.compilerOptions
+        if (compilerOptions) {
+          const baseUrl = compilerOptions.baseUrl
+          if (baseUrl) {
+            compilerOptions.baseUrl = path.join(root, baseUrl)
+            const host = createCompilerHost(config.compilerOptions)
+            const { resolvedModule } = resolveModuleName(
+              name,
+              root,
+              config.compilerOptions,
+              host
+            )
+
+            if (resolvedModule) {
+              return {
+                file: resolvedModule.resolvedFileName.replace(/\.d\.ts$/, ''),
+              }
+            }
+          }
+        }
+      }
+    },
     data: content,
     indentedSyntax,
-    includePaths: [root],
+    includePaths: [cwd],
   }).css
 }
 
